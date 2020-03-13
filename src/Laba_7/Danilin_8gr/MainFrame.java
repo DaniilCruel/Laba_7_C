@@ -11,17 +11,8 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+
 @SuppressWarnings("serial")
 
 public class MainFrame extends JFrame {
@@ -41,7 +32,7 @@ public class MainFrame extends JFrame {
     private static final int MEDIUM_GAP = 10;
     private static final int LARGE_GAP = 15;
 
-    private static final int SERVER_PORT = 4567;
+    private static final int SERVER_PORT = 6790;
 
 
     private final JTextField textFieldFrom;
@@ -58,7 +49,35 @@ public class MainFrame extends JFrame {
         setLocation((kit.getScreenSize().width - getWidth()) / 2,
                 (kit.getScreenSize().height - getHeight()) / 2);
 // Текстовая область для отображения полученных сообщений
-        textAreaIncoming = new JTextArea(INCOMING_AREA_DEFAULT_ROWS, 0);
+
+
+
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        JMenu chatMenu = new JMenu("Меню");
+
+        Action logInAction = new AbstractAction("Вход") {
+            public void actionPerformed(ActionEvent arg0) {
+                String value = JOptionPane.showInputDialog(MainFrame.this, "Введите имя для общения",
+                        "Вход", JOptionPane.QUESTION_MESSAGE);
+                 Data A = new Data(value, SERVER_PORT);
+                 Data.show();
+            }
+        };
+        menuBar.add(chatMenu);
+        chatMenu.add(logInAction);
+
+        Action addChatAction = new AbstractAction("Найти пользователя") {
+
+            public  void actionPerformed(ActionEvent arg0) {
+               Data.oData();
+            }
+        };
+
+        chatMenu.add(addChatAction);
+
+
+       textAreaIncoming = new JTextArea(INCOMING_AREA_DEFAULT_ROWS, 0);
         textAreaIncoming.setEditable(false);
 // Контейнер, обеспечивающий прокрутку текстовой области
         final JScrollPane scrollPaneIncoming =
@@ -76,8 +95,7 @@ public class MainFrame extends JFrame {
                 new JScrollPane(textAreaOutgoing);
 // Панель ввода сообщения
         final JPanel messagePanel = new JPanel();
-        messagePanel.setBorder(
-                BorderFactory.createTitledBorder("Сообщение"));
+        messagePanel.setBorder(BorderFactory.createTitledBorder("Сообщение"));
 // Кнопка отправки сообщения
         final JButton sendButton = new JButton("Отправить");
         sendButton.addActionListener(new ActionListener() {
